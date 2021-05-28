@@ -42,6 +42,23 @@ client.connect(err => {
             })
     })
 
+    // Get Public Profile Info
+    app.get('/profile/:userName', (req, res) => {
+        const userName = req.params.userName;
+        userCollection.findOne({ userName: userName }, (err, doc) => {
+            if (doc) {
+                const publicProfile = {
+                    fullName: doc.fullName,
+                    photo: doc.photo,
+                    role: doc.role
+                }
+                res.send(publicProfile)
+            } else {
+                res.send(false)
+            }
+        })
+    })
+
 })
 
 app.listen(process.env.PORT || port, () => {

@@ -1,10 +1,15 @@
 const express = require('express')
 const cors = require('cors')
 require('dotenv').config()
+const fs = require('fs')
+const fileupload = require('express-fileupload')
 const MongoClient = require('mongodb').MongoClient;
 const app = express()
+
 app.use(cors())
 app.use(express.json())
+app.use(express.static('serviceimg'))
+app.use(fileupload())
 const port = 2555;
 
 
@@ -17,6 +22,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(err => {
     console.log(err);
     const userCollection = client.db(`${process.env.DATABASE}`).collection("users");
+    const blogCollection = client.db(`${process.env.DATABASE}`).collection("blogs");
 
     app.get('/', (req, res) => {
         res.send('Hello World!')
@@ -57,6 +63,21 @@ client.connect(err => {
                 res.send(false)
             }
         })
+    })
+
+    // Add Blog Post
+    app.post('/addBlog', (req, res) => {
+        const blog = req.body
+        blogCollection.insertOne(blog)
+            .then(result => {
+                res.send(result.insertedCount > 0);
+            })
+    })
+
+    // Get Blog Post
+    app.get('/getBlogs', (req, res) => {
+        blogCollection.find()
+            .toArray((err, docs) => res.send(docs))
     })
 
 })

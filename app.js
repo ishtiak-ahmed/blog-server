@@ -83,6 +83,7 @@ client.connect(err => {
         blogCollection.find()
             .toArray((err, docs) => res.send(docs))
     })
+
     // Get Blog Post
     app.get('/blog/:id', (req, res) => {
         blogCollection.findOne({ _id: ObjectID(req.params.id) }, (err, doc) => {
@@ -181,6 +182,13 @@ client.connect(err => {
     })
     // Update Blog Reply Status
 
+    // Delete Comment
+    app.delete('/deleteComment/:id', (req, res) => {
+        commentCollection.deleteOne({ _id: req.params.id })
+            .then(result => {
+                res.send(result.deletedCount > 0)
+            })
+    })
 
 })
 

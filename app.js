@@ -161,6 +161,15 @@ client.connect(err => {
         })
     })
     // Update
+
+    // Delete Blog
+    app.delete('/deleteBlog/:id', (req, res) => {
+        blogCollection.deleteOne({ _id: ObjectID(req.params.id) })
+            .then(result => {
+                res.send(result.deletedCount > 0);
+            })
+    })
+    // Delete Blog
 })
 
 app.listen(process.env.PORT || port, () => {

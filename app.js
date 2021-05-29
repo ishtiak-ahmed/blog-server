@@ -190,6 +190,17 @@ client.connect(err => {
             })
     })
 
+    // Update Comment
+    app.patch('/updateComment/:id', (req, res) => {
+        commentCollection.updateOne({ _id: req.params.id }, {
+            $set: { comment: req.body.comment }
+        })
+            .then(result => {
+                res.send(result.modifiedCount > 0)
+                console.log(result.modifiedCount)
+            })
+    })
+
 })
 
 app.listen(process.env.PORT || port, () => {

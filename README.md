@@ -77,8 +77,12 @@
     [x] Show Down Vote
     [x] User Registration
     [x] Edit blog done
-    [ ] Delete Blog
-    [ ]
-    [ ]
-    [ ] Edit Comment
-    [ ] Delete Comment
+    [x] Delete Blog
+    [x] Turn On/Off reply of a specific post
+    [x] Delete all comment of a post
+    [x] Edit Comment
+    [x] Delete Comment
+    [ ] mark as spamm
+    [ ] schedule comment turn off
+    [ ] Feature comment
+    [ ] banned spammer from app

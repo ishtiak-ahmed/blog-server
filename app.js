@@ -4,6 +4,9 @@ require('dotenv').config()
 const fs = require('fs')
 const fileupload = require('express-fileupload')
 const MongoClient = require('mongodb').MongoClient;
+const ObjectID = require('mongodb').ObjectID
+
+
 const app = express()
 
 app.use(cors())
@@ -23,6 +26,7 @@ client.connect(err => {
     console.log(err);
     const userCollection = client.db(`${process.env.DATABASE}`).collection("users");
     const blogCollection = client.db(`${process.env.DATABASE}`).collection("blogs");
+    const commentCollection = client.db(`${process.env.DATABASE}`).collection("comments");
 
     app.get('/', (req, res) => {
         res.send('Hello World!')
@@ -78,6 +82,48 @@ client.connect(err => {
     app.get('/getBlogs', (req, res) => {
         blogCollection.find()
             .toArray((err, docs) => res.send(docs))
+    })
+    // Get Blog Post
+    app.get('/blog/:id', (req, res) => {
+        blogCollection.findOne({ _id: ObjectID(req.params.id) }, (err, doc) => {
+            if (doc) {
+                res.send(doc)
+            } else {
+                res.send(false)
+            }
+        })
+    })
+    // Get Comment
+    app.get('/getComment/:id', (req, res) => {
+        commentCollection.findOne(({ _id: req.params.id }), (err, doc) => {
+            if (doc) {
+                res.send(doc)
+            } else {
+                res.send(false)
+            }
+        })
+    })
+
+    // Update Comment Reply reference
+    app.patch('/updateParent/:id', (req, res) => {
+        const reply = req.body.reply
+        commentCollection.updateOne({ _id: req.params.id },
+            {
+                $set: { 'reply': reply }
+            }
+        ).then(result => {
+            res.send(result.modifiedCount > 0)
+        })
+    })
+
+    // Add Comment Reply
+    app.post('/addComment', (req, res) => {
+        const comment = req.body
+        commentCollection.insertOne(comment)
+            .then(result => {
+                res.send(result.insertedCount > 0);
+            })
+        res.send(true)
     })
 
 })

@@ -53,8 +53,8 @@
 
     [x] Register and login page
     [x] Private Secured route
-    [ ] New Blog
-    [ ] Show blog
+    [x] New Blog
+    [x] Show blog
     [ ] New Comment
     [ ] Show comment
     [ ] User permission

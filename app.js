@@ -147,6 +147,20 @@ client.connect(err => {
         })
     })
 
+
+
+    // Update
+    app.patch('/updateBlog/:id', (req, res) => {
+        const title = req.body.title;
+        const tag = req.body.tag;
+        const content = req.body.content;
+        blogCollection.updateOne({ _id: ObjectID(req.params.id) }, {
+            $set: { title: title, tag: tag, content: content }
+        }).then(result => {
+            res.send(result.modifiedCount > 0)
+        })
+    })
+    // Update
 })
 
 app.listen(process.env.PORT || port, () => {

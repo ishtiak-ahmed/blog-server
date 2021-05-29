@@ -170,6 +170,18 @@ client.connect(err => {
             })
     })
     // Delete Blog
+
+    // Update Blog Reply Status
+    app.patch('/updateReplyStatus/:id', (req, res) => {
+        blogCollection.updateOne({ _id: ObjectID(req.params.id) }, {
+            $set: { replyStatus: req.body.replyStatus }
+        }).then(result => {
+            res.send(result.modifiedCount > 0)
+        })
+    })
+    // Update Blog Reply Status
+
+
 })
 
 app.listen(process.env.PORT || port, () => {

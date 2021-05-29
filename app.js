@@ -104,10 +104,21 @@ client.connect(err => {
         })
     })
 
-    // Update Comment Reply reference
+    // Add Comment Reply reference
     app.patch('/updateParent/:id', (req, res) => {
         const reply = req.body.reply
         commentCollection.updateOne({ _id: req.params.id },
+            {
+                $set: { 'reply': reply }
+            }
+        ).then(result => {
+            res.send(result.modifiedCount > 0)
+        })
+    })
+    // Add Comment Reply reference to blog
+    app.patch('/updateBlogParent/:id', (req, res) => {
+        const reply = req.body.reply
+        blogCollection.updateOne({ _id: ObjectID(req.params.id) },
             {
                 $set: { 'reply': reply }
             }
@@ -124,6 +135,16 @@ client.connect(err => {
                 res.send(result.insertedCount > 0);
             })
         res.send(true)
+    })
+
+    //  Blog Up Vote
+    app.patch('/blogUpVote/:id', (req, res) => {
+        const upVote = req.body.upVote
+        blogCollection.updateOne({ _id: ObjectID(req.params.id) }, {
+            $set: { upVote: upVote }
+        }).then(result => {
+            res.send(result.modifiedCount > 0)
+        })
     })
 
 })

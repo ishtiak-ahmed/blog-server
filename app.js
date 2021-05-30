@@ -139,10 +139,9 @@ client.connect(err => {
     })
 
     //  Blog Up Vote
-    app.patch('/blogUpVote/:id', (req, res) => {
-        const upVote = req.body.upVote
+    app.patch('/updateVote/:id', (req, res) => {
         blogCollection.updateOne({ _id: ObjectID(req.params.id) }, {
-            $set: { upVote: upVote }
+            $set: req.body
         }).then(result => {
             res.send(result.modifiedCount > 0)
         })

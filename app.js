@@ -212,6 +212,32 @@ client.connect(err => {
             })
     })
 
+    // Update Spam Count
+    app.patch(`/spamCount/:id`, (req, res) => {
+        userCollection.findOne({ _id: req.params.id }, (err, doc) => {
+            if (doc) {
+                if (req.body.count) {
+                    const newCount = { spamcount: doc.spamcount + 1 }
+                    userCollection.updateOne({ _id: req.params.id }, {
+                        $set: newCount
+                    }).then(result => {
+                        res.send(result.modifiedCount > 0)
+                    })
+                }
+                if (!req.body.count) {
+                    const newCount = { spamcount: doc.spamcount - 1 }
+                    userCollection.updateOne({ _id: req.params.id }, {
+                        $set: newCount
+                    }).then(result => {
+                        res.send(result.modifiedCount > 0)
+                    })
+                }
+            } else {
+                console.log(err)
+            }
+        })
+    })
+
 })
 
 app.listen(process.env.PORT || port, () => {

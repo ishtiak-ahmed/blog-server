@@ -55,7 +55,7 @@ client.connect(err => {
     // Get Public Profile Info
     app.get('/profile/:userName', (req, res) => {
         const userName = req.params.userName;
-        userCollection.findOne({ userName: userName }, (err, doc) => {
+        userCollection.findOne({ _id: userName }, (err, doc) => {
             if (doc) {
                 const publicProfile = {
                     fullName: doc.fullName,

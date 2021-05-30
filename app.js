@@ -201,6 +201,17 @@ client.connect(err => {
             })
     })
 
+    // toggle Feature Comment 
+    app.patch('/toggleFeatureComment/:id', (req, res) => {
+        commentCollection.updateOne({ _id: req.params.id }, {
+            $set: req.body
+        })
+            .then(result => {
+                res.send(result.modifiedCount > 0)
+                console.log(result.modifiedCount)
+            })
+    })
+
 })
 
 app.listen(process.env.PORT || port, () => {

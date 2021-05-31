@@ -32,6 +32,33 @@ client.connect(err => {
         res.send('Hello World!')
     })
 
+
+    app.post('/login', (req, res) => {
+        console.log('login req recieved')
+        userCollection.findOne({ email: req.body.email }, (err, doc) => {
+            if (doc) {
+                console.log('email address found')
+                console.log(req.body.password)
+                console.log(doc.password)
+                if (doc.password === req.body.password) {
+                    console.log('password matched')
+                    const userInfo = {
+                        fullName: doc.fullName,
+                        userName: doc._id,
+                        role: doc.role,
+                        photo: doc.photo,
+                        spamcount: doc.spamcount
+                    }
+                    res.send(userInfo)
+                } else {
+                    res.send(false)
+                }
+            } else {
+                res.send(false)
+            }
+        })
+    })
+
     // Check Existing User
     app.post('/users', (req, res) => {
         const email = req.body.email;

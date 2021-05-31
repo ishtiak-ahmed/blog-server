@@ -59,6 +59,24 @@ client.connect(err => {
         })
     })
 
+    // Register User
+    app.post('/register', (req, res) => {
+        console.log(req.body.email)
+        const user = req.body
+        userCollection.findOne({ email: req.body.email }, (err, doc) => {
+            if (!doc) {
+                console.log('unique email')
+                userCollection.insertOne(user)
+                    .then(result => {
+                        console.log(result.insertedCount)
+                        res.send(result.insertedCount > 0)
+                    })
+            } else {
+                res.send(false)
+            }
+        })
+    })
+
     // Check Existing User
     app.post('/users', (req, res) => {
         const email = req.body.email;

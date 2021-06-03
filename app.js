@@ -293,7 +293,7 @@ client.connect(err => {
     })
 
     app.get('/getAnswer/:id', (req, res) => {
-        answerCollection.find()
+        answerCollection.find({ parent: req.params.id })
             .toArray((err, docs) => res.send(docs))
     })
     app.post('/addAnswer', (req, res) => {

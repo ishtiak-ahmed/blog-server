@@ -27,6 +27,9 @@ client.connect(err => {
     const userCollection = client.db(`${process.env.DATABASE}`).collection("users");
     const blogCollection = client.db(`${process.env.DATABASE}`).collection("blogs");
     const commentCollection = client.db(`${process.env.DATABASE}`).collection("comments");
+    const questionCollection = client.db(`${process.env.DATABASE}`).collection("questions");
+    const answerCollection = client.db(`${process.env.DATABASE}`).collection("answers");
+
 
     app.get('/', (req, res) => {
         res.send('Hello World!')
@@ -279,6 +282,45 @@ client.connect(err => {
             } else {
                 console.log(err)
             }
+        })
+    })
+
+
+    // AskAnything App Method
+    app.get('/allQuestions', (req, res) => {
+        questionCollection.find()
+            .toArray((err, docs) => res.send(docs))
+    })
+
+    app.get('/getAnswer/:id', (req, res) => {
+        answerCollection.find()
+            .toArray((err, docs) => res.send(docs))
+    })
+    app.post('/addAnswer', (req, res) => {
+        answerCollection.insertOne(req.body)
+            .then(result => {
+                res.send(result.insertedCount > 0)
+            })
+    })
+    app.post('/addQuestion', (req, res) => {
+        questionCollection.insertOne(req.body)
+            .then(result => {
+                res.send(result.insertedCount > 0)
+            })
+    })
+
+    app.patch('/updateQuetion/:id', (req, res) => {
+        questionCollection.updateOne({ _id: req.params.id }, {
+            $set: req.body
+        }).then(result => {
+            res.send(result.modifiedCount > 0)
+        })
+    })
+    app.patch('/updateAnswer/:id', (req, res) => {
+        answerCollection.updateOne({ _id: req.params.id }, {
+            $set: req.body
+        }).then(result => {
+            res.send(result.modifiedCount > 0)
         })
     })
 
